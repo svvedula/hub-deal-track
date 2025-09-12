@@ -10,7 +10,7 @@ const Footer = () => {
               <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-lg">B</span>
               </div>
-              <span className="text-xl font-bold text-foreground">BizConnect</span>
+              <span className="text-xl font-bold text-foreground">Bizzy</span>
             </div>
             <p className="text-muted-foreground">
               Empowering small businesses to connect, track, and grow together.
@@ -50,7 +50,7 @@ const Footer = () => {
         
         <div className="border-t border-card-border mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-muted-foreground text-sm">
-            © 2024 BizConnect. All rights reserved.
+            © 2024 Bizzy. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
             <a href="#privacy" className="hover:text-primary transition-colors">Privacy Policy</a>
