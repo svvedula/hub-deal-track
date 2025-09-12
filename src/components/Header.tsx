@@ -16,8 +16,8 @@ const Header = () => {
         </div>
         
         <nav className="hidden md:flex items-center gap-6">
-          <a href="#dashboard" className="text-foreground hover:text-primary transition-colors">Dashboard</a>
-          <a href="#network" className="text-foreground hover:text-primary transition-colors">Network</a>
+          <a href="/dashboard" className="text-foreground hover:text-primary transition-colors">Dashboard</a>
+          <a href="/directory" className="text-foreground hover:text-primary transition-colors">Directory</a>
           <a href="#deals" className="text-foreground hover:text-primary transition-colors">Deals</a>
           <a href="#analytics" className="text-foreground hover:text-primary transition-colors">Analytics</a>
         </nav>
@@ -26,8 +26,12 @@ const Header = () => {
           <Badge variant="secondary" className="hidden sm:inline-flex">
             Pro Plan
           </Badge>
-          <Button variant="outline" size="sm">Sign In</Button>
-          <Button variant="hero" size="sm">Get Started</Button>
+          <Button variant="outline" size="sm" asChild>
+            <a href="/login">Sign In</a>
+          </Button>
+          <Button variant="hero" size="sm" asChild>
+            <a href="/signup">Get Started</a>
+          </Button>
         </div>
       </div>
     </header>
