@@ -2,39 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Business Platform Design System - Professional B2B Interface */
 
 @layer base {
   :root {
+    /* Core brand colors */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    --foreground: 215 28% 17%;
+    
+    /* Business navy theme */
+    --primary: 217 91% 25%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 217 91% 35%;
+    
+    /* Success/growth green */
+    --success: 158 65% 45%;
+    --success-foreground: 0 0% 98%;
+    --success-light: 158 65% 55%;
+    
+    /* Warning amber */
+    --warning: 43 96% 56%;
+    --warning-foreground: 0 0% 98%;
+    
+    /* Cards and surfaces */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --card-foreground: 215 28% 17%;
+    --card-border: 214 32% 91%;
+    
+    /* Secondary elements */
+    --secondary: 214 32% 97%;
+    --secondary-foreground: 215 28% 17%;
+    
+    /* Muted elements */
+    --muted: 214 32% 95%;
+    --muted-foreground: 215 16% 47%;
+    
+    /* Accent for highlights */
+    --accent: 217 91% 95%;
+    --accent-foreground: 217 91% 25%;
+    
+    /* Interactive elements */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 25%;
+    
+    /* Destructive actions */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    
+    /* Gradients for hero sections */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 25%) 0%, hsl(217 91% 35%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(158 65% 45%) 0%, hsl(158 65% 55%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 25%) 0%, hsl(158 65% 45%) 100%);
+    
+    /* Shadows for depth */
+    --shadow-card: 0 4px 6px -1px hsl(217 91% 25% / 0.1), 0 2px 4px -1px hsl(217 91% 25% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(217 91% 25% / 0.1), 0 4px 6px -2px hsl(217 91% 25% / 0.05);
+    --shadow-hero: 0 20px 25px -5px hsl(217 91% 25% / 0.15), 0 10px 10px -5px hsl(217 91% 25% / 0.04);
 
     --radius: 0.5rem;
 
