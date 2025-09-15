@@ -14,7 +14,102 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      businesses: {
+        Row: {
+          active_deals: number | null
+          category: string
+          connections: number | null
+          created_at: string
+          description: string | null
+          id: string
+          location: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active_deals?: number | null
+          category: string
+          connections?: number | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          location: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active_deals?: number | null
+          category?: string
+          connections?: number | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      deals: {
+        Row: {
+          company_name: string
+          created_at: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+          value: number
+        }
+        Insert: {
+          company_name: string
+          created_at?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          value: number
+        }
+        Update: {
+          company_name?: string
+          created_at?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          value?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          business_name: string
+          created_at: string
+          email: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          business_name: string
+          created_at?: string
+          email: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          business_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

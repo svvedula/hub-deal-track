@@ -1,17 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, MapPin, Users, Handshake } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const BusinessDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [businesses, setBusinesses] = useState<any[]>([]);
 
-  // Mock business data
-  const businesses = [
+  useEffect(() => {
+    fetchBusinesses();
+  }, []);
+
+  const fetchBusinesses = async () => {
+    const { data } = await supabase
+      .from('businesses')
+      .select('*')
+      .order('created_at', { ascending: false });
+    setBusinesses(data || []);
+  };
+
+  // Static business data for demo
+  const staticBusinesses = [
     {
       id: 1,
       name: "Local Roasters Co.",
@@ -76,7 +90,9 @@ const BusinessDirectory = () => {
 
   const categories = ["All", "Food & Beverage", "Technology", "Services", "Equipment", "Design"];
 
-  const filteredBusinesses = businesses.filter(business => {
+  const allBusinesses = [...businesses, ...staticBusinesses];
+  
+  const filteredBusinesses = allBusinesses.filter(business => {
     const matchesSearch = business.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          business.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "" || selectedCategory === "All" || business.category === selectedCategory;
