@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      bank_statements: {
+        Row: {
+          ai_analysis: Json | null
+          created_at: string
+          file_size: number | null
+          filename: string
+          id: string
+          processing_status: string | null
+          updated_at: string
+          upload_date: string
+          user_id: string
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          created_at?: string
+          file_size?: number | null
+          filename: string
+          id?: string
+          processing_status?: string | null
+          updated_at?: string
+          upload_date?: string
+          user_id: string
+        }
+        Update: {
+          ai_analysis?: Json | null
+          created_at?: string
+          file_size?: number | null
+          filename?: string
+          id?: string
+          processing_status?: string | null
+          updated_at?: string
+          upload_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       businesses: {
         Row: {
           active_deals: number | null
@@ -53,6 +89,57 @@ export type Database = {
         }
         Relationships: []
       }
+      deal_opportunities: {
+        Row: {
+          created_at: string
+          creator_user_id: string
+          deal_type: string
+          description: string
+          id: string
+          industry: string | null
+          interested_parties: number | null
+          investment_range_max: number | null
+          investment_range_min: number | null
+          location: string | null
+          status: string | null
+          title: string
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          creator_user_id: string
+          deal_type: string
+          description: string
+          id?: string
+          industry?: string | null
+          interested_parties?: number | null
+          investment_range_max?: number | null
+          investment_range_min?: number | null
+          location?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          creator_user_id?: string
+          deal_type?: string
+          description?: string
+          id?: string
+          industry?: string | null
+          interested_parties?: number | null
+          investment_range_max?: number | null
+          investment_range_min?: number | null
+          location?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
       deals: {
         Row: {
           company_name: string
@@ -83,6 +170,39 @@ export type Database = {
         }
         Relationships: []
       }
+      financial_accounts: {
+        Row: {
+          account_name: string
+          account_type: string
+          bank_name: string | null
+          created_at: string
+          current_balance: number | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_name: string
+          account_type: string
+          bank_name?: string | null
+          created_at?: string
+          current_balance?: number | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_name?: string
+          account_type?: string
+          bank_name?: string | null
+          created_at?: string
+          current_balance?: number | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           business_name: string
@@ -109,6 +229,101 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      spending_insights: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          insight_type: string
+          metadata: Json | null
+          potential_savings: number | null
+          priority: string | null
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          insight_type: string
+          metadata?: Json | null
+          potential_savings?: number | null
+          priority?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          insight_type?: string
+          metadata?: Json | null
+          potential_savings?: number | null
+          priority?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          account_id: string | null
+          ai_parsed: boolean | null
+          amount: number
+          category: string | null
+          created_at: string
+          date: string
+          description: string
+          id: string
+          merchant: string | null
+          transaction_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          ai_parsed?: boolean | null
+          amount: number
+          category?: string | null
+          created_at?: string
+          date: string
+          description: string
+          id?: string
+          merchant?: string | null
+          transaction_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_id?: string | null
+          ai_parsed?: boolean | null
+          amount?: number
+          category?: string | null
+          created_at?: string
+          date?: string
+          description?: string
+          id?: string
+          merchant?: string | null
+          transaction_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_transactions_account"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "financial_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
