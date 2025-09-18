@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Users, Handshake } from "lucide-react";
+import { Search, MapPin, Users, Handshake, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 const BusinessDirectory = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [businesses, setBusinesses] = useState<any[]>([]);
@@ -24,69 +26,8 @@ const BusinessDirectory = () => {
     setBusinesses(data || []);
   };
 
-  // Static business data for demo
-  const staticBusinesses = [
-    {
-      id: 1,
-      name: "Local Roasters Co.",
-      category: "Food & Beverage",
-      location: "Downtown",
-      description: "Premium coffee roasting and wholesale distribution",
-      connections: 23,
-      activeDeals: 5,
-      image: "☕"
-    },
-    {
-      id: 2,
-      name: "Digital Solutions",
-      category: "Technology",
-      location: "Tech District",
-      description: "Web development and digital marketing services",
-      connections: 41,
-      activeDeals: 8,
-      image: "💻"
-    },
-    {
-      id: 3,
-      name: "Green Thumb Landscaping",
-      category: "Services",
-      location: "Suburbs",
-      description: "Commercial and residential landscaping services",
-      connections: 18,
-      activeDeals: 3,
-      image: "🌱"
-    },
-    {
-      id: 4,
-      name: "Artisan Bakery",
-      category: "Food & Beverage",
-      location: "Old Town",
-      description: "Handcrafted breads and pastries for wholesale",
-      connections: 15,
-      activeDeals: 2,
-      image: "🥖"
-    },
-    {
-      id: 5,
-      name: "Tech Rentals",
-      category: "Equipment",
-      location: "Industrial Park",
-      description: "Computer and office equipment rental services",
-      connections: 32,
-      activeDeals: 6,
-      image: "🖥️"
-    },
-    {
-      id: 6,
-      name: "Creative Studio",
-      category: "Design",
-      location: "Arts Quarter",
-      description: "Graphic design and branding for small businesses",
-      connections: 27,
-      activeDeals: 4,
-      image: "🎨"
-    }
-  ];
+  // Only show real businesses from database
+  const staticBusinesses: any[] = [];
 
   const categories = ["All", "Food & Beverage", "Technology", "Services", "Equipment", "Design"];
 
@@ -104,13 +45,23 @@ const BusinessDirectory = () => {
       {/* Header */}
       <header className="border-b border-card-border bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">B</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">Business Directory</h1>
-              <p className="text-xs text-muted-foreground">Discover and connect with local businesses</p>
+          <div className="flex items-center gap-4 mb-4">
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/dashboard')}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </Button>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-lg">B</span>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-foreground">Business Directory</h1>
+                <p className="text-xs text-muted-foreground">Discover and connect with local businesses</p>
+              </div>
             </div>
           </div>
 
@@ -148,8 +99,28 @@ const BusinessDirectory = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredBusinesses.map((business) => (
+        {filteredBusinesses.length === 0 ? (
+          <Card className="p-8 text-center">
+            <CardContent>
+              <div className="space-y-4">
+                <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto">
+                  <Search className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium">No businesses found</h3>
+                  <p className="text-muted-foreground">
+                    There are no businesses in the directory yet. Try creating one from your dashboard!
+                  </p>
+                </div>
+                <Button onClick={() => navigate('/dashboard')} variant="outline">
+                  Go back to Dashboard
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredBusinesses.map((business) => (
             <Card key={business.id} className="border-card-border hover:shadow-lg-custom transition-all duration-300">
               <CardHeader>
                 <div className="flex items-start justify-between">
@@ -193,9 +164,10 @@ const BusinessDirectory = () => {
                   </Button>
                 </div>
               </CardContent>
-            </Card>
-          ))}
-        </div>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

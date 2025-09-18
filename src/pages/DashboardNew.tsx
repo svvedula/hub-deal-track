@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import FinancialDashboard from "@/components/financial/FinancialDashboard";
 import DealsMarketplace from "@/components/marketplace/DealsMarketplace";
+import InventoryManagement from "@/components/inventory/InventoryManagement";
+import DeliveryCompany from "@/components/delivery/DeliveryCompany";
 import { 
   TrendingUp, 
   Users, 
@@ -19,7 +21,9 @@ import {
   Archive,
   LogOut,
   CreditCard,
-  Handshake
+  Handshake,
+  ArrowLeft,
+  Truck
 } from "lucide-react";
 
 export default function Dashboard() {
@@ -28,6 +32,8 @@ export default function Dashboard() {
   const [profile, setProfile] = useState<any>(null);
   const [deals, setDeals] = useState<any[]>([]);
   const [businesses, setBusinesses] = useState<any[]>([]);
+  const [currentView, setCurrentView] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
     if (user) {
@@ -71,6 +77,73 @@ export default function Dashboard() {
 
   const totalRevenue = deals.reduce((sum, deal) => sum + Number(deal.value || 0), 0);
 
+  const handleBackToDashboard = () => {
+    setCurrentView("dashboard");
+    setActiveTab("overview");
+  };
+
+  const handleQuickAction = (action: string) => {
+    switch (action) {
+      case "find-businesses":
+        navigate('/directory');
+        break;
+      case "create-deal":
+        setActiveTab("marketplace");
+        break;
+      case "view-analytics":
+        // Future implementation
+        break;
+      case "manage-inventory":
+        setCurrentView("inventory");
+        break;
+      case "delivery-companies":
+        setCurrentView("delivery");
+        break;
+      default:
+        break;
+    }
+  };
+
+  if (currentView === "inventory") {
+    return (
+      <div className="min-h-screen bg-background p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6 flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              onClick={handleBackToDashboard}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </Button>
+          </div>
+          <InventoryManagement />
+        </div>
+      </div>
+    );
+  }
+
+  if (currentView === "delivery") {
+    return (
+      <div className="min-h-screen bg-background p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6 flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              onClick={handleBackToDashboard}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </Button>
+          </div>
+          <DeliveryCompany />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto">
@@ -86,8 +159,8 @@ export default function Dashboard() {
           </Button>
         </div>
 
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Overview
@@ -99,6 +172,10 @@ export default function Dashboard() {
             <TabsTrigger value="marketplace" className="flex items-center gap-2">
               <Handshake className="h-4 w-4" />
               Deal Marketplace
+            </TabsTrigger>
+            <TabsTrigger value="delivery" className="flex items-center gap-2">
+              <Truck className="h-4 w-4" />
+              Delivery
             </TabsTrigger>
           </TabsList>
 
@@ -191,25 +268,49 @@ export default function Dashboard() {
                     <Button 
                       variant="outline" 
                       className="h-20 flex flex-col gap-2"
-                      onClick={() => navigate('/directory')}
+                      onClick={() => handleQuickAction("find-businesses")}
                     >
                       <Search className="h-6 w-6" />
                       Find Businesses
                     </Button>
                     
-                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                    <Button 
+                      variant="outline" 
+                      className="h-20 flex flex-col gap-2"
+                      onClick={() => handleQuickAction("create-deal")}
+                    >
                       <Plus className="h-6 w-6" />
                       Create Deal
                     </Button>
                     
-                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                    <Button 
+                      variant="outline" 
+                      className="h-20 flex flex-col gap-2"
+                      onClick={() => handleQuickAction("view-analytics")}
+                    >
                       <BarChart3 className="h-6 w-6" />
                       View Analytics
                     </Button>
                     
-                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                    <Button 
+                      variant="outline" 
+                      className="h-20 flex flex-col gap-2"
+                      onClick={() => handleQuickAction("manage-inventory")}
+                    >
                       <Archive className="h-6 w-6" />
                       Manage Inventory
+                    </Button>
+                  </div>
+                  
+                  {/* Additional Actions Row */}
+                  <div className="grid grid-cols-1 gap-4 mt-4">
+                    <Button 
+                      variant="outline" 
+                      className="h-20 flex items-center justify-center gap-2"
+                      onClick={() => handleQuickAction("delivery-companies")}
+                    >
+                      <Truck className="h-6 w-6" />
+                      Delivery Companies
                     </Button>
                   </div>
                 </CardContent>
@@ -223,6 +324,10 @@ export default function Dashboard() {
 
           <TabsContent value="marketplace">
             <DealsMarketplace />
+          </TabsContent>
+
+          <TabsContent value="delivery">
+            <DeliveryCompany />
           </TabsContent>
 
         </Tabs>
