@@ -330,7 +330,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_deal_views: {
+        Args: { deal_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
