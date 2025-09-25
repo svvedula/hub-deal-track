@@ -15,21 +15,13 @@ const DeliveryCompany = () => {
 
   const deliveryCompanies = [
     {
-      id: "sv-delivery",
-      name: "SV DELIVERY",
-      description: "Fast and reliable business delivery service",
-      rating: 4.8,
-      estimatedTime: "2-4 hours",
-      price: "$25.00",
-      features: ["Same-day delivery", "Business priority", "Email notifications", "Package tracking"]
-    },
-    {
       id: "express-logistics",
       name: "Express Logistics",
       description: "Premium express delivery solutions",
       rating: 4.6,
       estimatedTime: "1-2 hours",
       price: "$35.00",
+      email: "logistics@expressdelivery.com",
       features: ["Express delivery", "Real-time tracking", "Insurance included"]
     },
     {
@@ -39,50 +31,49 @@ const DeliveryCompany = () => {
       rating: 4.4,
       estimatedTime: "4-8 hours",
       price: "$18.00",
+      email: "orders@reliabletransport.com",
       features: ["Budget-friendly", "Bulk discounts", "Scheduled delivery"]
     }
   ];
 
   const handleSelectDelivery = async (companyId: string) => {
-    if (companyId === "sv-delivery") {
-      setIsBooking(true);
-      
-      try {
-        // Send email notification for SV DELIVERY
-        const { error } = await supabase.functions.invoke('send-delivery-notification', {
-          body: {
-            userEmail: user?.email,
-            companyName: "SV DELIVERY",
-            deliveryDetails: {
-              estimatedTime: "2-4 hours",
-              price: "$25.00",
-              features: ["Same-day delivery", "Business priority", "Email notifications", "Package tracking"]
-            }
+    const selectedCompanyData = deliveryCompanies.find(c => c.id === companyId);
+    if (!selectedCompanyData) return;
+
+    setIsBooking(true);
+    
+    try {
+      // Send email notification to the delivery company
+      const { error } = await supabase.functions.invoke('send-delivery-notification', {
+        body: {
+          companyEmail: selectedCompanyData.email,
+          companyName: selectedCompanyData.name,
+          userEmail: user?.email,
+          deliveryDetails: {
+            estimatedTime: selectedCompanyData.estimatedTime,
+            price: selectedCompanyData.price,
+            features: selectedCompanyData.features
           }
-        });
+        }
+      });
 
-        if (error) throw error;
+      if (error) throw error;
 
-        toast({
-          title: "Delivery Booked Successfully!",
-          description: "SV DELIVERY has been selected. A confirmation email has been sent to your registered email address.",
-        });
-      } catch (error) {
-        console.error('Error sending delivery notification:', error);
-        toast({
-          title: "Delivery Booked",
-          description: "SV DELIVERY has been selected. Note: Email notification service is currently unavailable.",
-          variant: "default"
-        });
-      } finally {
-        setIsBooking(false);
-      }
-    } else {
+      setSelectedCompany(companyId);
+      toast({
+        title: "Delivery Booked Successfully!",
+        description: `${selectedCompanyData.name} has been notified of your delivery request.`,
+      });
+    } catch (error) {
+      console.error('Error sending delivery notification:', error);
       setSelectedCompany(companyId);
       toast({
         title: "Delivery Selected",
-        description: `${deliveryCompanies.find(c => c.id === companyId)?.name} has been selected for your delivery.`,
+        description: `${selectedCompanyData.name} has been selected. Note: Email notification service is currently unavailable.`,
+        variant: "default"
       });
+    } finally {
+      setIsBooking(false);
     }
   };
 
@@ -104,7 +95,7 @@ const DeliveryCompany = () => {
             }`}
           >
             <CardHeader>
-              <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-hero rounded-lg flex items-center justify-center">
                     <Truck className="h-5 w-5 text-primary-foreground" />
@@ -113,9 +104,6 @@ const DeliveryCompany = () => {
                     <CardTitle className="text-lg">{company.name}</CardTitle>
                     <div className="flex items-center gap-2">
                       <Badge variant="secondary">⭐ {company.rating}</Badge>
-                      {company.id === "sv-delivery" && (
-                        <Badge variant="default">Recommended</Badge>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -150,22 +138,14 @@ const DeliveryCompany = () => {
                 </ul>
               </div>
 
-              {company.id === "sv-delivery" && (
-                <div className="bg-primary/10 p-3 rounded-lg">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail className="h-4 w-4 text-primary" />
-                    <span className="text-primary font-medium">Email notification included</span>
-                  </div>
-                </div>
-              )}
               
               <Button 
                 onClick={() => handleSelectDelivery(company.id)}
                 className="w-full"
                 disabled={isBooking}
-                variant={company.id === "sv-delivery" ? "default" : "outline"}
+                variant="outline"
               >
-                {isBooking && company.id === "sv-delivery" ? (
+                {isBooking ? (
                   "Booking..."
                 ) : selectedCompany === company.id ? (
                   "Selected"
@@ -186,7 +166,7 @@ const DeliveryCompany = () => {
           <CardContent>
             <p className="text-success">
               Your delivery has been scheduled with {deliveryCompanies.find(c => c.id === selectedCompany)?.name}. 
-              {selectedCompany === "sv-delivery" && " A confirmation email has been sent to your registered address."}
+              The delivery company has been notified of your request.
             </p>
           </CardContent>
         </Card>

@@ -6,8 +6,9 @@ const corsHeaders = {
 };
 
 interface DeliveryNotificationRequest {
-  userEmail: string;
+  companyEmail: string;
   companyName: string;
+  userEmail: string;
   deliveryDetails: {
     estimatedTime: string;
     price: string;
@@ -22,27 +23,28 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { userEmail, companyName, deliveryDetails }: DeliveryNotificationRequest = await req.json();
+    const { companyEmail, companyName, userEmail, deliveryDetails }: DeliveryNotificationRequest = await req.json();
 
     console.log("Delivery notification request received:", {
-      userEmail,
+      companyEmail,
       companyName,
+      userEmail,
       deliveryDetails
     });
 
     // For now, we'll just log the delivery booking
     // In a real implementation, you would integrate with an email service like Resend
-    console.log(`Delivery booked for ${userEmail} with ${companyName}`);
+    console.log(`New delivery request from ${userEmail} to ${companyName} (${companyEmail})`);
     console.log(`Estimated delivery time: ${deliveryDetails.estimatedTime}`);
     console.log(`Price: ${deliveryDetails.price}`);
     console.log(`Features: ${deliveryDetails.features.join(", ")}`);
 
-    // Simulate email sending success
+    // Simulate email sending success to delivery company
     const emailResponse = {
       id: `delivery_${Date.now()}`,
-      to: userEmail,
-      subject: `Delivery Confirmation - ${companyName}`,
-      message: "Delivery booking confirmed successfully"
+      to: companyEmail,
+      subject: `New Delivery Request from ${userEmail}`,
+      message: "New delivery booking received"
     };
 
     console.log("Delivery notification sent successfully:", emailResponse);

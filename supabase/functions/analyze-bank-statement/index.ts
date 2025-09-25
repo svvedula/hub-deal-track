@@ -109,6 +109,30 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`OpenAI API error ${response.status}:`, errorText);
+      
+      // Handle rate limit (429) or other API errors gracefully
+      if (response.status === 429) {
+        // Update bank statement with rate limit error status
+        await supabase
+          .from('bank_statements')
+          .update({
+            processing_status: 'rate_limited',
+            ai_analysis: { error: 'OpenAI API rate limit exceeded. Please try again later.' }
+          })
+          .eq('id', bankStatement.id);
+          
+        return new Response(JSON.stringify({ 
+          success: false,
+          error: 'OpenAI API rate limit exceeded. Please try again later.',
+          bankStatementId: bankStatement.id 
+        }), {
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
@@ -191,10 +215,10 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in analyze-bank-statement function:', error);
     return new Response(JSON.stringify({ 
-      error: error.message,
+      error: error.message || 'Unknown error occurred',
       success: false 
     }), {
       status: 500,
