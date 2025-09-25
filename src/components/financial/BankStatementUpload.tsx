@@ -71,6 +71,18 @@ export default function BankStatementUpload({ onAnalysisComplete }: BankStatemen
         throw new Error(error.message || 'Failed to analyze bank statement');
       }
 
+      // Handle graceful failures (e.g., rate limit) returned as 200
+      if (data && data.success === false) {
+        setUploadStatus('error');
+        setUploadProgress(100);
+        toast({
+          title: 'Analysis unavailable',
+          description: data.error || 'The analysis service is temporarily unavailable. Please try again shortly.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       setUploadProgress(100);
       setUploadStatus('complete');
 

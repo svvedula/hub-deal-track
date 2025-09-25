@@ -126,9 +126,10 @@ serve(async (req) => {
         return new Response(JSON.stringify({ 
           success: false,
           error: 'OpenAI API rate limit exceeded. Please try again later.',
-          bankStatementId: bankStatement.id 
+          bankStatementId: bankStatement.id,
+          rate_limited: true
         }), {
-          status: 429,
+          status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
