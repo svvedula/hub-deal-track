@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
+import PDFParser from 'https://esm.sh/pdf-parse@1.1.1';
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
@@ -33,8 +34,32 @@ serve(async (req) => {
       throw new Error('Invalid authentication token');
     }
 
-    const { bankStatementText, filename } = await req.json();
+    const { bankStatementData, filename } = await req.json();
     console.log('Processing bank statement for user:', user.id);
+
+    let bankStatementText = '';
+    
+    // Handle different file types
+    if (filename?.toLowerCase().endsWith('.pdf')) {
+      try {
+        // Decode base64 PDF data
+        const binaryString = atob(bankStatementData);
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        
+        const pdfData = await PDFParser(bytes);
+        bankStatementText = pdfData.text;
+        console.log('Extracted text from PDF:', bankStatementText.length, 'characters');
+      } catch (pdfError) {
+        console.error('PDF parsing error:', pdfError);
+        throw new Error('Failed to parse PDF file. Please ensure it\'s a valid PDF with readable text.');
+      }
+    } else {
+      // For CSV/TXT files, use the text directly
+      bankStatementText = bankStatementData;
+    }
 
     // Create bank statement record
     const { data: bankStatement, error: insertError } = await supabase

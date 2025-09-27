@@ -47,8 +47,19 @@ export default function BankStatementUpload({ onAnalysisComplete }: BankStatemen
     setUploadProgress(20);
 
     try {
-      // Read file content
-      const fileContent = await file.text();
+      let fileContent;
+      
+      // Handle different file types
+      if (file.type === 'application/pdf') {
+        // For PDF files, convert to base64
+        const arrayBuffer = await file.arrayBuffer();
+        const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+        fileContent = base64String;
+      } else {
+        // For text files, read as text
+        fileContent = await file.text();
+      }
+      
       setUploadProgress(50);
       setUploadStatus('analyzing');
 
@@ -61,7 +72,7 @@ export default function BankStatementUpload({ onAnalysisComplete }: BankStatemen
       // Call AI analysis function
       const { data, error } = await supabase.functions.invoke('analyze-bank-statement', {
         body: {
-          bankStatementText: fileContent,
+          bankStatementData: fileContent,
           filename: file.name
         }
       });
