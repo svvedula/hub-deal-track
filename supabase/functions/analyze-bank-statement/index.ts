@@ -154,19 +154,31 @@ serve(async (req) => {
     }
 
     const aiResponse = await response.json();
-    const analysisText = aiResponse.choices[0].message.content;
+    const analysisText = aiResponse.choices?.[0]?.message?.content ?? '';
     
-    console.log('AI analysis completed');
+    console.log('AI analysis completed, raw length:', analysisText.length);
 
-    let analysisData;
-    try {
-      // Try to parse the JSON response
-      analysisData = JSON.parse(analysisText);
-    } catch (parseError) {
-      console.error('Failed to parse AI response as JSON:', parseError);
-      // Fallback: store raw response
-      analysisData = { raw_response: analysisText };
+    // Robust JSON extraction (handles code fences and extra text)
+    function extractJson(text: string): any | null {
+      if (!text) return null;
+      let cleaned = text.trim();
+      // Remove markdown code fences
+      if (cleaned.startsWith('```')) {
+        cleaned = cleaned.replace(/^```(?:json|JSON)?\s*/m, '').replace(/```\s*$/m, '').trim();
+      }
+      // Try direct parse
+      try { return JSON.parse(cleaned); } catch (_e) {}
+      // Try to find the first opening brace and last closing brace
+      const first = cleaned.indexOf('{');
+      const last = cleaned.lastIndexOf('}');
+      if (first !== -1 && last !== -1 && last > first) {
+        const candidate = cleaned.slice(first, last + 1);
+        try { return JSON.parse(candidate); } catch (_e) {}
+      }
+      return null;
     }
+
+    let analysisData = extractJson(analysisText) ?? { raw_response: analysisText };
 
     // Update bank statement with AI analysis
     await supabase
