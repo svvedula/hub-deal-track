@@ -47,15 +47,11 @@ export default function FinancialDashboard() {
     if (!user) return;
 
     try {
-      // Fetch transactions for the last 30 days
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
+      // Fetch all transactions (we'll show recent period in summary)
       const { data: transactions, error } = await supabase
         .from('transactions')
         .select('*')
         .eq('user_id', user.id)
-        .gte('date', thirtyDaysAgo.toISOString().split('T')[0])
         .order('date', { ascending: false });
 
       if (error) {
