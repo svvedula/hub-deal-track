@@ -1,7 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
-import PDFParser from 'https://esm.sh/pdf-parse@1.1.1';
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
@@ -42,19 +41,11 @@ serve(async (req) => {
     // Handle different file types
     if (filename?.toLowerCase().endsWith('.pdf')) {
       try {
-        // Decode base64 PDF data
-        const binaryString = atob(bankStatementData);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        
-        const pdfData = await PDFParser(bytes);
-        bankStatementText = pdfData.text;
-        console.log('Extracted text from PDF:', bankStatementText.length, 'characters');
+        // For now, ask user to convert PDF to text format
+        throw new Error('PDF files are not currently supported. Please convert your PDF to a CSV or TXT file and try again. You can use online tools like "PDF to Text" converters or copy-paste the content from your PDF.');
       } catch (pdfError) {
         console.error('PDF parsing error:', pdfError);
-        throw new Error('Failed to parse PDF file. Please ensure it\'s a valid PDF with readable text.');
+        throw pdfError;
       }
     } else {
       // For CSV/TXT files, use the text directly

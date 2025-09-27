@@ -22,11 +22,11 @@ export default function BankStatementUpload({ onAnalysisComplete }: BankStatemen
     if (!file) return;
 
     // Validate file type
-    const allowedTypes = ['text/plain', 'text/csv', 'application/pdf'];
+    const allowedTypes = ['text/plain', 'text/csv'];
     if (!allowedTypes.includes(file.type)) {
       toast({
         title: "Invalid file type",
-        description: "Please upload a PDF, CSV, or TXT file containing your bank statement.",
+        description: "Please upload a CSV or TXT file containing your bank statement. PDF support is coming soon - for now, please convert your PDF to text format.",
         variant: "destructive",
       });
       return;
@@ -47,18 +47,8 @@ export default function BankStatementUpload({ onAnalysisComplete }: BankStatemen
     setUploadProgress(20);
 
     try {
-      let fileContent;
-      
-      // Handle different file types
-      if (file.type === 'application/pdf') {
-        // For PDF files, convert to base64
-        const arrayBuffer = await file.arrayBuffer();
-        const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-        fileContent = base64String;
-      } else {
-        // For text files, read as text
-        fileContent = await file.text();
-      }
+      // For text files, read as text
+      const fileContent = await file.text();
       
       setUploadProgress(50);
       setUploadStatus('analyzing');
@@ -172,7 +162,7 @@ export default function BankStatementUpload({ onAnalysisComplete }: BankStatemen
           <div className="border-2 border-dashed border-muted rounded-lg p-6 text-center">
             <Input
               type="file"
-              accept=".pdf,.csv,.txt"
+              accept=".csv,.txt"
               onChange={handleFileUpload}
               disabled={isUploading}
               className="hidden"
@@ -186,7 +176,7 @@ export default function BankStatementUpload({ onAnalysisComplete }: BankStatemen
                 <FileText className="h-10 w-10 mx-auto text-muted-foreground" />
                 <div className="text-sm font-medium">{getStatusText()}</div>
                 <div className="text-xs text-muted-foreground">
-                  Supports PDF, CSV, and TXT files (max 10MB)
+                  Supports CSV and TXT files (max 10MB)
                 </div>
               </div>
             </label>
