@@ -23,7 +23,9 @@ import {
   CreditCard,
   Handshake,
   ArrowLeft,
-  Truck
+  Truck,
+  Building2,
+  UserCog
 } from "lucide-react";
 
 export default function Dashboard() {
@@ -303,7 +305,7 @@ export default function Dashboard() {
                   </div>
                   
                   {/* Additional Actions Row */}
-                  <div className="grid grid-cols-1 gap-4 mt-4">
+                  <div className="grid grid-cols-2 gap-4 mt-4">
                     <Button 
                       variant="outline" 
                       className="h-20 flex items-center justify-center gap-2"
@@ -311,6 +313,25 @@ export default function Dashboard() {
                     >
                       <Truck className="h-6 w-6" />
                       Delivery Companies
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="h-20 flex items-center justify-center gap-2"
+                      onClick={() => navigate('/profile-settings')}
+                    >
+                      <UserCog className="h-6 w-6" />
+                      Edit Profile
+                    </Button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 gap-4 mt-4">
+                    <Button 
+                      variant="outline" 
+                      className="h-20 flex items-center justify-center gap-2"
+                      onClick={() => navigate('/companies')}
+                    >
+                      <Building2 className="h-6 w-6" />
+                      Company Directory
                     </Button>
                   </div>
                 </CardContent>

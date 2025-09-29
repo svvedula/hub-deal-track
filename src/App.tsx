@@ -9,6 +9,10 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/DashboardNew";
 import BusinessDirectory from "./pages/BusinessDirectory";
+import ProfileSettings from "./pages/ProfileSettings";
+import CompanyDirectory from "./pages/CompanyDirectory";
+import CompanyProfile from "./pages/CompanyProfile";
+import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +45,26 @@ const App = () => (
             <Route path="/directory" element={
               <ProtectedRoute>
                 <BusinessDirectory />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile-settings" element={
+              <ProtectedRoute>
+                <ProfileSettings />
+              </ProtectedRoute>
+            } />
+            <Route path="/companies" element={
+              <ProtectedRoute>
+                <CompanyDirectory />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile/:userId" element={
+              <ProtectedRoute>
+                <CompanyProfile />
+              </ProtectedRoute>
+            } />
+            <Route path="/chat/:userId" element={
+              <ProtectedRoute>
+                <Chat />
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

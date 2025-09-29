@@ -203,30 +203,78 @@ export type Database = {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          read: boolean | null
+          receiver_id: string
+          sender_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          read?: boolean | null
+          receiver_id: string
+          sender_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          read?: boolean | null
+          receiver_id?: string
+          sender_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           business_name: string
+          business_type: string | null
           created_at: string
+          description: string | null
           email: string
           id: string
+          location: string | null
+          logo_url: string | null
+          phone: string | null
           updated_at: string
           user_id: string
+          website: string | null
         }
         Insert: {
           business_name: string
+          business_type?: string | null
           created_at?: string
+          description?: string | null
           email: string
           id?: string
+          location?: string | null
+          logo_url?: string | null
+          phone?: string | null
           updated_at?: string
           user_id: string
+          website?: string | null
         }
         Update: {
           business_name?: string
+          business_type?: string | null
           created_at?: string
+          description?: string | null
           email?: string
           id?: string
+          location?: string | null
+          logo_url?: string | null
+          phone?: string | null
           updated_at?: string
           user_id?: string
+          website?: string | null
         }
         Relationships: []
       }
