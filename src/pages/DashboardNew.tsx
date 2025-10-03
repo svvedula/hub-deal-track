@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import FinancialDashboard from "@/components/financial/FinancialDashboard";
@@ -31,6 +32,7 @@ import {
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { isAdmin } = useUserRole();
   const [profile, setProfile] = useState<any>(null);
   const [deals, setDeals] = useState<any[]>([]);
   const [businesses, setBusinesses] = useState<any[]>([]);
@@ -155,10 +157,17 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold text-foreground mb-2">Business Dashboard</h1>
             <p className="text-muted-foreground">Welcome back, {profile?.business_name || 'Business Owner'}! Manage your finances and discover deals.</p>
           </div>
-          <Button variant="outline" onClick={handleSignOut}>
-            <LogOut className="w-4 h-4 mr-2" />
-            Sign Out
-          </Button>
+          <div className="flex gap-4">
+            {isAdmin && (
+              <Button onClick={() => navigate("/admin")} variant="secondary">
+                Admin Panel
+              </Button>
+            )}
+            <Button variant="outline" onClick={handleSignOut}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">

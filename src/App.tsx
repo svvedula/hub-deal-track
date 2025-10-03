@@ -13,6 +13,7 @@ import ProfileSettings from "./pages/ProfileSettings";
 import CompanyDirectory from "./pages/CompanyDirectory";
 import CompanyProfile from "./pages/CompanyProfile";
 import Chat from "./pages/Chat";
+import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -65,6 +66,11 @@ const App = () => (
             <Route path="/chat/:userId" element={
               <ProtectedRoute>
                 <Chat />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <AdminPanel />
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
