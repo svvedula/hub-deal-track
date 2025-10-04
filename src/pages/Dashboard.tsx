@@ -9,10 +9,15 @@ import {
   MapPin, 
   TrendingUp,
   Plus,
-  Bell
+  Bell,
+  Shield
 } from "lucide-react";
+import { useUserRole } from "@/hooks/useUserRole";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const { isOwner } = useUserRole();
+  const navigate = useNavigate();
   const stats = [
     { title: "Active Deals", value: "12", change: "+3", icon: Handshake, color: "text-success" },
     { title: "Network Connections", value: "48", change: "+7", icon: Users, color: "text-primary" },
@@ -42,6 +47,16 @@ const Dashboard = () => {
           </div>
           
           <div className="flex items-center gap-3">
+            {isOwner && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => navigate('/admin')}
+              >
+                <Shield className="h-4 w-4 mr-2" />
+                Roles
+              </Button>
+            )}
             <Button variant="outline" size="sm">
               <Bell className="h-4 w-4 mr-2" />
               Notifications
