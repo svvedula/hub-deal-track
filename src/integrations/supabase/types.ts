@@ -406,14 +406,8 @@ export type Database = {
         }
         Returns: boolean
       }
-      increment_deal_views: {
-        Args: { deal_id: string }
-        Returns: undefined
-      }
-      is_admin: {
-        Args: { _user_id: string }
-        Returns: boolean
-      }
+      increment_deal_views: { Args: { deal_id: string }; Returns: undefined }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "owner" | "moderator" | "user"
