@@ -4,11 +4,12 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, Users, MessageSquare, DollarSign, ArrowLeft, Eye } from "lucide-react";
+import { Shield, Users, MessageSquare, DollarSign, ArrowLeft, Eye, Building2, UserCog } from "lucide-react";
 import { AdminCompanies } from "@/components/admin/AdminCompanies";
 import { AdminChats } from "@/components/admin/AdminChats";
 import { AdminRoles } from "@/components/admin/AdminRoles";
 import { AdminDeals } from "@/components/admin/AdminDeals";
+import { AdminUsers } from "@/components/admin/AdminUsers";
 
 export default function AdminPanel() {
   const navigate = useNavigate();
@@ -64,10 +65,14 @@ export default function AdminPanel() {
           </Button>
         </div>
 
-        <Tabs defaultValue="companies" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+        <Tabs defaultValue="users" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="users">
+              <UserCog className="h-4 w-4 mr-2" />
+              Users
+            </TabsTrigger>
             <TabsTrigger value="companies">
-              <Users className="h-4 w-4 mr-2" />
+              <Building2 className="h-4 w-4 mr-2" />
               Companies
             </TabsTrigger>
             <TabsTrigger value="chats">
@@ -85,6 +90,20 @@ export default function AdminPanel() {
               </TabsTrigger>
             )}
           </TabsList>
+
+          <TabsContent value="users">
+            <Card>
+              <CardHeader>
+                <CardTitle>User Management</CardTitle>
+                <CardDescription>
+                  Manage user accounts, ban users, and delete accounts
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <AdminUsers />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="companies">
             <Card>
