@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Building2, MapPin, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Building2, MapPin, MessageSquare, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface CompanyProfile {
   user_id: string;
@@ -22,6 +23,7 @@ const CompanyDirectory = () => {
   const navigate = useNavigate();
   const [companies, setCompanies] = useState<CompanyProfile[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isCreatingTestCompanies, setIsCreatingTestCompanies] = useState(false);
 
   useEffect(() => {
     fetchCompanies();
@@ -35,6 +37,23 @@ const CompanyDirectory = () => {
 
     if (data) {
       setCompanies(data);
+    }
+  };
+
+  const createTestCompanies = async () => {
+    setIsCreatingTestCompanies(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-test-companies');
+      
+      if (error) throw error;
+      
+      toast.success('Test companies created successfully!');
+      fetchCompanies();
+    } catch (error) {
+      console.error('Error creating test companies:', error);
+      toast.error('Failed to create test companies');
+    } finally {
+      setIsCreatingTestCompanies(false);
     }
   };
 
@@ -56,9 +75,19 @@ const CompanyDirectory = () => {
           </Button>
         </div>
 
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Company Directory</h1>
-          <p className="text-muted-foreground">Connect with other businesses</p>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Company Directory</h1>
+            <p className="text-muted-foreground">Connect with other businesses</p>
+          </div>
+          <Button 
+            onClick={createTestCompanies}
+            disabled={isCreatingTestCompanies}
+            variant="outline"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            {isCreatingTestCompanies ? 'Creating...' : 'Add Test Companies'}
+          </Button>
         </div>
 
         <div className="mb-6">
