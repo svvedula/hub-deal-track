@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const handleProtectedNavigation = (path: string) => {
+    navigate('/login');
+  };
+
   return (
     <header className="border-b border-card-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -16,10 +23,10 @@ const Header = () => {
         </div>
         
         <nav className="hidden md:flex items-center gap-6">
-          <a href="/dashboard" className="text-foreground hover:text-primary transition-colors">Dashboard</a>
-          <a href="/directory" className="text-foreground hover:text-primary transition-colors">Directory</a>
-          <a href="#deals" className="text-foreground hover:text-primary transition-colors">Deals</a>
-          <a href="#analytics" className="text-foreground hover:text-primary transition-colors">Analytics</a>
+          <button onClick={() => handleProtectedNavigation('/dashboard')} className="text-foreground hover:text-primary transition-colors">Dashboard</button>
+          <button onClick={() => handleProtectedNavigation('/directory')} className="text-foreground hover:text-primary transition-colors">Directory</button>
+          <button onClick={() => handleProtectedNavigation('/dashboard')} className="text-foreground hover:text-primary transition-colors">Deals</button>
+          <button onClick={() => handleProtectedNavigation('/dashboard')} className="text-foreground hover:text-primary transition-colors">Analytics</button>
         </nav>
         
         <div className="flex items-center gap-3">

@@ -1,8 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-business.jpg";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
+  const handleStartTrial = () => {
+    navigate('/login');
+  };
+
   return (
     <section className="relative py-20 lg:py-32 overflow-hidden">
       <div className="container mx-auto px-4">
@@ -23,7 +30,7 @@ const HeroSection = () => {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="hero" size="lg" className="shadow-hero">
+              <Button variant="hero" size="lg" className="shadow-hero" onClick={handleStartTrial}>
                 Start Free Trial
               </Button>
               <Button variant="outline" size="lg">
