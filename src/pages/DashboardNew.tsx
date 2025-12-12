@@ -11,6 +11,7 @@ import FinancialDashboard from "@/components/financial/FinancialDashboard";
 import DealsMarketplace from "@/components/marketplace/DealsMarketplace";
 import InventoryManagement from "@/components/inventory/InventoryManagement";
 import DeliveryCompany from "@/components/delivery/DeliveryCompany";
+import BusinessAnalytics from "@/components/analytics/BusinessAnalytics";
 import { 
   TrendingUp, 
   Users, 
@@ -95,7 +96,7 @@ export default function Dashboard() {
         setActiveTab("marketplace");
         break;
       case "view-analytics":
-        // Future implementation
+        setCurrentView("analytics");
         break;
       case "manage-inventory":
         setCurrentView("inventory");
@@ -107,6 +108,26 @@ export default function Dashboard() {
         break;
     }
   };
+
+  if (currentView === "analytics") {
+    return (
+      <div className="min-h-screen bg-background p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6 flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              onClick={handleBackToDashboard}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </Button>
+          </div>
+          <BusinessAnalytics />
+        </div>
+      </div>
+    );
+  }
 
   if (currentView === "inventory") {
     return (
