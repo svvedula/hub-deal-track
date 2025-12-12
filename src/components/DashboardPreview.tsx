@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 import dashboardImage from "@/assets/dashboard-preview.jpg";
 import { ArrowUpRight, DollarSign, Users, TrendingUp, Package } from "lucide-react";
 
@@ -36,6 +37,12 @@ const mockStats = [
 ];
 
 const DashboardPreview = () => {
+  const navigate = useNavigate();
+
+  const handleExploreDashboard = () => {
+    navigate('/login');
+  };
+
   return (
     <section className="py-20">
       <div className="container mx-auto px-4">
@@ -73,7 +80,7 @@ const DashboardPreview = () => {
               ))}
             </div>
             
-            <Button variant="premium" size="lg" className="group">
+            <Button variant="premium" size="lg" className="group" onClick={handleExploreDashboard}>
               Explore Dashboard
               <ArrowUpRight className="h-4 w-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
             </Button>
